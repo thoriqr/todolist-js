@@ -11,53 +11,58 @@
     ></script>
     <title>Todo List app</title>
   </head>
-
   <body>
     <div id="app-container">
       <div class="main">
         <button id="theme-toggle">
           <span class="sun-icon"><i class="far fa-sun fa-xl"></i></span>
-          <span class="moon-icon hidden"><i class="fas fa-moon fa-xl"></i></span>
+          <span class="moon-icon hidden"
+            ><i class="fas fa-moon fa-xl"></i
+          ></span>
         </button>
         <div class="completed-log" title="Completed Todo">
           <div class="completed-todo-action">
-            <button id="open-completed-todo"><i class="fas fa-bars fa-lg"></i></button>
-            <span class="unopened-completed-todo hidden"><i class="fas fa-circle fa-bounce"></i></span>
-          </div> 
-       </div>
-       <div class="overlay-completed-todo hidden">
-        <div class="completed-container">
-          <div class="completed-todo">
-            <div id="close-completed-todo"><i class="fas fa-x"></i></div>
-            <div class="completed-text">Completed Todo</div>
-          <div class="completed-wrap">
-            <div class="completed-todo-list">
-              <button id="btn-clear-all">clear all</button>
-              <div class="completed-todo-body">
-                <div class="completed-todo-header">
-                  <button id="completed-detail"><i class="fas fa-circle-info "></i></button>
-                  <div class="completed-todo-title">is Completed</div>
-                  <div class="completed-todo-description">Todo Completed
-                  </div>
-                  <div class="completed-todo-date">
-                    <div class="date">Completed: 29 July 2023 at 23:15</div>
-                  </div>
-                </div>     
-              </div>    
-            </div>
-          </div>
+            <button id="open-completed-todo">
+              <i class="fas fa-bars fa-lg"></i>
+            </button>
+            <span class="unopened-completed-todo hidden"
+              ><i class="fas fa-circle fa-bounce"></i
+            ></span>
           </div>
         </div>
-       </div>
-        
-
+        <div class="overlay-completed-todo hidden">
+          <div class="completed-container">
+            <div class="completed-todo">
+              <div id="close-completed-todo"><i class="fas fa-x"></i></div>
+              <div class="completed-text">Completed Todo</div>
+              <div class="completed-wrap">
+                <div class="completed-todo-list">
+                  <button id="btn-clear-all">clear all</button>
+                  <div class="completed-todo-body">
+                    <div class="completed-todo-header">
+                      <button id="completed-detail">
+                        <i class="fas fa-circle-info"></i>
+                      </button>
+                      <div class="completed-todo-title">is Completed</div>
+                      <div class="completed-todo-description">
+                        Todo Completed
+                      </div>
+                      <div class="completed-todo-date">
+                        <div class="date">Completed: 29 July 2023 at 23:15</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="scroll-to">
           <button id="scroll-down"><i class="fas fa-arrow-down"></i></button>
         </div>
-        
         <div class="app-title">
-          <h1>Todo List app</h2>  
-        </div>   
+          <h1>Todo List app</h1>
+        </div>
         <div class="form-container">
           <form id="add-todo-form">
             <div class="form-group">
@@ -83,7 +88,7 @@
                 <i class="fas fa-x"></i>
               </button>
             </div>
-  
+
             <div class="form-action-add">
               <button type="submit" id="btn-add-todo">add</button>
             </div>
@@ -113,12 +118,16 @@
           </div>
         </div>
         <div class="todo-list">
-          <h2>Todo List</h2>   
+          <h2>Todo List</h2>
         </div>
-        <div class="search-container">     
+        <div class="search-container">
           <div class="search-todo">
-            <input type="text" id="search-input" placeholder="Keywords filter Todo title">
-          </div>    
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Keywords filter Todo title"
+            />
+          </div>
         </div>
         <section class="card-container">
           <div class="todo-card">
@@ -137,10 +146,10 @@
               </div>
             </div>
           </div>
-        </section>     
+        </section>
         <div id="alert-container"></div>
       </div>
-      </div>
+    </div>
     <script type="module" src="./frontend/index.js"></script>
   </body>
 </html>
