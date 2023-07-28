@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/frontend/style.css" />
+    <script
+      src="https://kit.fontawesome.com/f9f47a3aa2.js"
+      crossorigin="anonymous"
+    ></script>
+    <title>Todo List app</title>
+  </head>
+
+  <body>
+    <div id="app-container">
+      <div class="main">
+        <button id="theme-toggle">
+          <span class="sun-icon"><i class="far fa-sun fa-xl"></i></span>
+          <span class="moon-icon hidden"><i class="fas fa-moon fa-xl"></i></span>
+        </button>
+        <div class="completed-log" title="Completed Todo">
+          <div class="completed-todo-action">
+            <button id="open-completed-todo"><i class="fas fa-bars fa-lg"></i></button>
+            <span class="unopened-completed-todo hidden"><i class="fas fa-circle fa-bounce"></i></span>
+          </div> 
+       </div>
+       <div class="overlay-completed-todo hidden">
+        <div class="completed-container">
+          <div class="completed-todo">
+            <div id="close-completed-todo"><i class="fas fa-x"></i></div>
+            <div class="completed-text">Completed Todo</div>
+          <div class="completed-wrap">
+            <div class="completed-todo-list">
+              <button id="btn-clear-all">clear all</button>
+              <div class="completed-todo-body">
+                <div class="completed-todo-header">
+                  <button id="completed-detail"><i class="fas fa-circle-info "></i></button>
+                  <div class="completed-todo-title">is Completed</div>
+                  <div class="completed-todo-description">Todo Completed
+                  </div>
+                  <div class="completed-todo-date">
+                    <div class="date">Completed: 29 July 2023 at 23:15</div>
+                  </div>
+                </div>     
+              </div>    
+            </div>
+          </div>
+          </div>
+        </div>
+       </div>
+        
+
+        <div class="scroll-to">
+          <button id="scroll-down"><i class="fas fa-arrow-down"></i></button>
+        </div>
+        
+        <div class="app-title">
+          <h1>Todo List app</h2>  
+        </div>   
+        <div class="form-container">
+          <form id="add-todo-form">
+            <div class="form-group">
+              <input
+                type="text"
+                id="add-title-input"
+                autocomplete="off"
+                placeholder="Do you have a plan?"
+                maxlength="25"
+              />
+              <button id="clear-input-title" title="Clear">
+                <i class="fas fa-x"></i>
+              </button>
+            </div>
+            <div class="warning-field warn-add-title hidden"></div>
+            <div class="form-group">
+              <textarea
+                id="add-description-input"
+                autocomplete="off"
+                placeholder="You can describe it too!"
+              ></textarea>
+              <button id="clear-input-description" title="Clear">
+                <i class="fas fa-x"></i>
+              </button>
+            </div>
+  
+            <div class="form-action-add">
+              <button type="submit" id="btn-add-todo">add</button>
+            </div>
+          </form>
+        </div>
+        <div class="overlay-edit-form hidden">
+          <div class="modal-edit-form">
+            <form id="edit-todo-form">
+              <div class="form-group">
+                <input type="text" id="edit-todo-title" placeholder="" />
+                <button id="clear-input-title" title="Clear">
+                  <i class="fas fa-x"></i>
+                </button>
+              </div>
+              <div class="warning-field warn-edit-title"></div>
+              <div class="form-group">
+                <textarea id="edit-todo-description" placeholder=""></textarea>
+                <button id="clear-input-description" title="Clear">
+                  <i class="fas fa-x"></i>
+                </button>
+              </div>
+              <div class="form-action-edit">
+                <button id="btn-cancel-todo">cancel</button>
+                <button type="submit" id="btn-save-todo">save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="todo-list">
+          <h2>Todo List</h2>   
+        </div>
+        <div class="search-container">     
+          <div class="search-todo">
+            <input type="text" id="search-input" placeholder="Keywords filter Todo title">
+          </div>    
+        </div>
+        <section class="card-container">
+          <div class="todo-card">
+            <div class="todo-action">
+              <div class="edit-act">EDIT</div>
+              <div class="delete-act">DELETE</div>
+              <div class="complete-act">COMPLETE</div>
+            </div>
+            <div class="todo-body">
+              <div class="todo-header">
+                <div class="todo-title">Todo title</div>
+              </div>
+              <div class="todo-content">Todo is active</div>
+              <div class="todo-footer">
+                <div class="todo-date"></div>
+              </div>
+            </div>
+          </div>
+        </section>     
+        <div id="alert-container"></div>
+      </div>
+      </div>
+    <script type="module" src="./frontend/index.js"></script>
+  </body>
+</html>
