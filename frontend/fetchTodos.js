@@ -13,13 +13,20 @@ export function addNewTodo(todo_title, todo_description) {
     todo_title: todo_title,
     todo_description: todo_description,
   }
-  const request = new Request("https://itchy-seal-wig.cyclic.app/todos", {
+  const request = new Request("http://localhost:4000/todos", {
     method: "POST",
     headers: {"Content-Type" : "application/json"},
     body: JSON.stringify(newTodo)
   })
   const response = fetch(request)
-  return response.then(response => response.json()) 
+  return response.then(response => {
+    if(!response.ok) {
+      return response.json().then((data) => {
+        throw new Error(data.message)
+      })
+    }
+    return response.json()
+  })
 }
 
 // SINGLE TODO
@@ -30,7 +37,6 @@ export function getTodoById(todo_id) {
   const response = fetch(request)
   return response.then(response => response.json())
 }
-
 
 // UPDATE TODO
 export function updateTodo(todo_id, todo_title, todo_description) {
@@ -57,13 +63,12 @@ export function completeTodo(todo_id) {
 }
 
 // DELETE TODO
-export async function deleteTodo(todo_id) {
+export function deleteTodo(todo_id) {
   const request = new Request(`https://itchy-seal-wig.cyclic.app/todos/${todo_id}`, {
     method: "DELETE",
   })
   const response = fetch(request)
-  const response_1 = await response;
-  return await response_1.json();
+  return response.then(response => response.json()) 
 }
 
 // DELETE COMPLETED TODO

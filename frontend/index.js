@@ -160,7 +160,7 @@ async function handleEditTodo(todo_id, todo_title, todo_description) {
   );
   const btnSaveTodo = document.getElementById("btn-save-todo");
   const btnCancel = document.getElementById("btn-cancel-todo");
-  
+
   // Show the modal
   overlayEditForm.classList.remove("hidden");
 
@@ -168,17 +168,17 @@ async function handleEditTodo(todo_id, todo_title, todo_description) {
     warnFieldEditTitle.classList.add("hidden");
     editTodoTitle.style.borderBottomColor = "";
     overlayEditForm.classList.add("hidden");
-  }
+  };
   btnCancel.onclick = (e) => {
     e.preventDefault();
-    closeModal()
+    closeModal();
   };
 
   overlayEditForm.onclick = (e) => {
-    if(e.target === overlayEditForm) {
-      closeModal()
+    if (e.target === overlayEditForm) {
+      closeModal();
     }
-  }
+  };
 
   try {
     const todo = await getTodoById(todo_id);
@@ -201,8 +201,7 @@ async function handleEditTodo(todo_id, todo_title, todo_description) {
 }
 
 async function handleUpdateTodo(todo_id) {
-  const overlay = document.querySelector(".overlay");
-  const modalEditForm = document.querySelector(".modal-edit-form");
+  const overlayEditForm = document.querySelector(".overlay-edit-form");
   try {
     const todo_title = document.getElementById("edit-todo-title").value;
     const todo_description = document.getElementById(
@@ -213,8 +212,7 @@ async function handleUpdateTodo(todo_id) {
     console.log(data);
     displayTodos();
 
-    overlay.classList.add("hidden");
-    modalEditForm.classList.add("hidden");
+    overlayEditForm.classList.add("hidden");
   } catch (error) {
     console.log(error);
   }
@@ -223,7 +221,7 @@ async function handleUpdateTodo(todo_id) {
 async function handleCompleteTodo(todo_id) {
   try {
     const data = await completeTodo(todo_id);
-    displayAlert("Todo completed successfully", "complete");
+    displayAlert(data.message, "blue");
     displayTodos();
     console.log(data);
   } catch (error) {
@@ -236,7 +234,7 @@ async function handleRemoveTodo(todo_id) {
     const data = await deleteTodo(todo_id);
     const card = document.querySelector(`[todo-id="${todo_id}"]`);
     card.remove();
-    displayAlert("Todo deleted successfully", "delete");
+    displayAlert(data.message, "red");
     displayTodos();
     console.log(data);
   } catch (error) {
@@ -266,35 +264,31 @@ async function handleAddTodo(e) {
   const clearInputDescription = document.getElementById(
     "clear-input-description"
   );
-
   const btnAddTodo = document.getElementById("btn-add-todo");
   const todo_title = addTitleInput.value.trim();
   const todo_description = addDescriptionInput.value.trim();
   const date = new Date();
   const todo_created = date.toISOString().replace("T", " ").slice(0, 19);
+  if (!todo_title) {
+    // If todo title is empty, display a warning and don't submit the form
+    addTitleInput.style.borderBottomColor = "red";
+    warnFieldAddTitle.classList.remove("hidden");
+    warnFieldAddTitle.textContent = "Title cannot be empty!";
+    return;
+  }
   btnAddTodo.disabled = true;
   try {
-    if (todo_title.length >= 1) {
-      const data = await addNewTodo(todo_title, todo_description, todo_created);
-      console.log(data, todo_created);
-      displayAlert("Todo added successfully", "add");
-      displayTodos();
-      clearInputTitle.style.display = "none";
-      clearInputDescription.style.display = "none";
-      addTodoForm.reset();
-      btnAddTodo.classList.add("submitting");
-      btnAddTodo.style.cursor = "not-allowed";
-    } else if (todo_description.length >= 1) {
-      addTitleInput.style.borderBottomColor = "red";
-      warnFieldAddTitle.classList.remove("hidden");
-      warnFieldAddTitle.textContent = "Please fill Todo title first!";
-    } else {
-      addTitleInput.style.borderBottomColor = "red";
-      warnFieldAddTitle.classList.remove("hidden");
-      warnFieldAddTitle.textContent = "Title cannot be empty!";
-    }
+    const data = await addNewTodo(todo_title, todo_description, todo_created);
+    console.log(data, todo_created);
+    displayAlert(data.message, "green");
+    displayTodos();
+    clearInputTitle.style.display = "none";
+    clearInputDescription.style.display = "none";
+    addTodoForm.reset();
+    btnAddTodo.classList.add("submitting");
+    btnAddTodo.style.cursor = "not-allowed";
   } catch (error) {
-    return error;
+    displayAlert(error.message, "red");
   } finally {
     setTimeout(() => {
       btnAddTodo.disabled = false;
@@ -305,14 +299,16 @@ async function handleAddTodo(e) {
 }
 
 function updateCompletedTodo(todos) {
-  const overlayCompletedTodo = document.querySelector(".overlay-completed-todo");
+  const overlayCompletedTodo = document.querySelector(
+    ".overlay-completed-todo"
+  );
   const completedTodoAction = document.querySelector(".completed-todo-action");
   const unopenedCompletedTodo = document.querySelector(
     ".unopened-completed-todo"
   );
   const openCompletedTodo = document.getElementById("open-completed-todo");
   const closeCompletedTodo = document.getElementById("close-completed-todo");
-  
+
   openCompletedTodo.onclick = () => {
     unopenedCompletedTodo.classList.add("hidden");
     overlayCompletedTodo.classList.remove("hidden");
@@ -431,9 +427,9 @@ function displayAlert(message, type) {
   if (alertElement) {
     // Remove the previous alert class
     alertElement.classList.remove(
-      "alert-add",
-      "alert-delete",
-      "alert-complete"
+      "alert-green",
+      "alert-red",
+      "alert-blue"
     );
     // Update the content of the existing alert
     const alertText = alertElement.querySelector(".alert-text");
@@ -512,14 +508,14 @@ function searchTodo() {
   };
 }
 
-let scrollDownTimeout
+let scrollDownTimeout;
 function scrollToBottom() {
   const scrollY = window.scrollY;
   const windowHeight = window.innerHeight;
   const documentHeight = document.body.scrollHeight;
   const scrollDown = document.getElementById("scroll-down");
 
-  clearTimeout(scrollDownTimeout)
+  clearTimeout(scrollDownTimeout);
 
   scrollDown.onclick = () => {
     window.scrollTo({
@@ -528,7 +524,7 @@ function scrollToBottom() {
       behavior: "smooth",
     });
   };
-  
+
   // If scrolled to the bottom, hide scrollDown
   if (scrollY + windowHeight >= documentHeight) {
     scrollDown.style.display = "none";
@@ -537,7 +533,7 @@ function scrollToBottom() {
 
     scrollDownTimeout = setTimeout(() => {
       scrollDown.style.display = "none";
-    }, 2000)
+    }, 2000);
   }
 }
 window.addEventListener("scroll", scrollToBottom);

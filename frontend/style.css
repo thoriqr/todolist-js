@@ -550,7 +550,7 @@ h2 {
   padding: 10px;
 }
 
-.alert-add {
+.alert-green {
   font-size: 1.25em;
   border-radius: 0.25em;
   font-weight: 600;
@@ -558,7 +558,7 @@ h2 {
   background-color: #28a745; /* Custom background color for add action */
 }
 
-.alert-delete {
+.alert-red {
   font-size: 1.25em;
   border-radius: 0.25em;
   font-weight: 600;
@@ -566,7 +566,7 @@ h2 {
   background-color: #d6404f; /* Custom background color for delete action */
 }
 
-.alert-complete {
+.alert-blue {
   font-size: 1.25em;
   border-radius: 0.25em;
   font-weight: 600;
