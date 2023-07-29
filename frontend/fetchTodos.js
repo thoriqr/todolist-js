@@ -13,7 +13,7 @@ export function addNewTodo(todo_title, todo_description) {
     todo_title: todo_title,
     todo_description: todo_description,
   }
-  const request = new Request("http://localhost:4000/todos", {
+  const request = new Request("https://itchy-seal-wig.cyclic.app/todos", {
     method: "POST",
     headers: {"Content-Type" : "application/json"},
     body: JSON.stringify(newTodo)
