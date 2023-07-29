@@ -17,7 +17,7 @@ Live demo of the app [here](https://todolist-jstest.netlify.app/). Feel free to 
 
 To run this app locally, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/yourusername/todolist-app.git`
+1. Clone the repository: `git clone https://github.com/thoriqr/todolist-app.git`
 2. Navigate to the project directory: `cd todolist-app/backend`
 3. Install dependencies: `npm install`
 4. Set up MongoDB: [Install MongoDB](link-to-mongodb-installation-guide) and create a new database for the app.
