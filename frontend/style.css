@@ -287,7 +287,6 @@ h2 {
   outline: none;
 }
 
-
 /* Todo card */
 .card-container {
   display: flex;
@@ -387,6 +386,32 @@ h2 {
   background-color: var(--hover-action);
 }
 
+/* Todo card loading state */
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+}
+
+.loading-state {
+  color: var(--text-color);
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+}
+
+.response-container {
+  display: block;
+  text-align: center;
+}
+
+.response-text {
+  color: var(--text-color);
+  font-family: monospace;
+  font-weight: 500;
+  font-size: 1.5em;
+}
+
 /* Completed todo */
 #btn-clear-all {
   color: var(--text-color);
@@ -484,7 +509,7 @@ h2 {
 }
 
 .completed-todo-body {
-  position: relative;  
+  position: relative;
   margin-bottom: 8px;
   border-radius: 0.25em;
   border: solid 0.125em var(--border-color);
@@ -596,12 +621,12 @@ h2 {
   z-index: 1;
 }
 
-#scroll-down{
+#scroll-down {
   display: none;
   color: var(--text-color);
   border: solid 0.125em var(--border-color);
   cursor: pointer;
-  background-color: var(--bg-todo)
+  background-color: var(--bg-todo);
 }
 
 /* Responsive Screen */
@@ -612,25 +637,27 @@ h2 {
 }
 
 @media screen and (max-width: 768px) {
-  #add-todo-form, .search-todo, .complete-todo-body {
+  #add-todo-form,
+  .search-todo,
+  .complete-todo-body {
     width: 400px;
   }
 
   .completed-container {
     width: 50%;
   }
-
 }
 
 @media screen and (max-width: 425px) {
-  #add-todo-form, .search-todo {
+  #add-todo-form,
+  .search-todo {
     width: 100%;
   }
 
-  #add-title-input, #add-description-input {
+  #add-title-input,
+  #add-description-input {
     font-size: 1.35em;
   }
-  
 
   .card-container {
     display: block;
@@ -644,7 +671,7 @@ h2 {
     width: 100%;
   }
 
-  #edit-todo-form{
+  #edit-todo-form {
     width: 280px;
   }
 

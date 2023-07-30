@@ -20,7 +20,7 @@
             ><i class="fas fa-moon fa-xl"></i
           ></span>
         </button>
-        <div class="completed-log" title="Completed Todo">
+        <div class="completed-log">
           <div class="completed-todo-action">
             <button id="open-completed-todo">
               <i class="fas fa-bars fa-lg"></i>
@@ -36,23 +36,7 @@
               <div id="close-completed-todo"><i class="fas fa-x"></i></div>
               <div class="completed-text">Completed Todo</div>
               <div class="completed-wrap">
-                <div class="completed-todo-list">
-                  <button id="btn-clear-all">clear all</button>
-                  <div class="completed-todo-body">
-                    <div class="completed-todo-header">
-                      <button id="completed-detail">
-                        <i class="fas fa-circle-info"></i>
-                      </button>
-                      <div class="completed-todo-title">is Completed</div>
-                      <div class="completed-todo-description">
-                        Todo Completed
-                      </div>
-                      <div class="completed-todo-date">
-                        <div class="date">Completed: 29 July 2023 at 23:15</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <div class="completed-todo-list"></div>
               </div>
             </div>
           </div>
@@ -129,25 +113,10 @@
             />
           </div>
         </div>
-        <section class="card-container">
-          <div class="todo-card">
-            <div class="todo-action">
-              <div class="edit-act">EDIT</div>
-              <div class="delete-act">DELETE</div>
-              <div class="complete-act">COMPLETE</div>
-            </div>
-            <div class="todo-body">
-              <div class="todo-header">
-                <div class="todo-title">Todo title</div>
-              </div>
-              <div class="todo-content">Todo is active</div>
-              <div class="todo-footer">
-                <div class="todo-date"></div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <section class="card-container"></section>
         <div id="alert-container"></div>
+        <div class="loading-container"></div>
+        <div class="response-container"></div>
       </div>
     </div>
     <script type="module" src="index.js"></script>

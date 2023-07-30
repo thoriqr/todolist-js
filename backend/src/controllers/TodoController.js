@@ -26,7 +26,7 @@ export const completeTodo = async (req, res) => {
 
     await completedTodo.save();
     res.json({
-      message: "Todo is completed!",
+      message: "Todo Completed!",
       data: completedTodo,
     });
   } catch (error) {
@@ -43,7 +43,7 @@ export const addNewTodo = async (req, res) => {
     if (existingTodosCount >= maxTodoLimit) {
       return res
         .status(403)
-        .json({ message: "You have reached the maximum limit of todos" });
+        .json({ message: "You have reached the maximum limit of Todos" });
     }
 
     const todo = new Todo(req.body);
@@ -53,16 +53,16 @@ export const addNewTodo = async (req, res) => {
     todo.todo_status = false;
     todo.todo_created = new Date();
 
-    const saveTodoPromise = todo.save()
+    const saveTodoPromise = todo.save();
     const timeoutPromise = new Promise((resolve, reject) => {
       setTimeout(() => {
-        reject(new Error("Request time out, Please try again!"))
+        reject(new Error("Request time out, Please try again!"));
       }, 5000); // Timeout after 5 seconds
-    })
+    });
 
-    const insertTodo = await Promise.race([saveTodoPromise, timeoutPromise])
+    const insertTodo = await Promise.race([saveTodoPromise, timeoutPromise]);
     res.status(201).json({
-      message: "New Todo added!",
+      message: "New Todo Added!",
       data: insertTodo,
     });
   } catch (error) {
@@ -77,7 +77,7 @@ export const updateTodo = async (req, res) => {
       { $set: req.body }
     );
     res.status(200).json({
-      message: "Todo has been Updated!",
+      message: "Todo Updated!",
       data: updatedTodo,
     });
   } catch (error) {
@@ -89,7 +89,7 @@ export const deleteTodo = async (req, res) => {
   try {
     const deletedTodo = await Todo.deleteOne({ _id: req.params.id });
     res.status(200).json({
-      message: "Todo has been Deleted!",
+      message: "Todo Deleted!",
       data: deletedTodo,
     });
   } catch (error) {
@@ -101,7 +101,7 @@ export const deleteAllCompleted = async (req, res) => {
   try {
     const deletedCompleted = await Todo.deleteMany({ todo_status: true });
     res.status(200).json({
-      message: "Completed Todo has been Deleted!",
+      message: "Completed Todo Deleted!",
       data: deletedCompleted,
     });
   } catch (error) {

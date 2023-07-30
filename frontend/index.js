@@ -10,14 +10,29 @@ import {
 
 async function displayTodos() {
   let todosFound = false; // Variable to track if any todos were found
+  const main = document.querySelector(".main");
+  const cardContainer = document.querySelector(".card-container");
+  const responseContainer = document.querySelector(".response-container");
+  const responseText = document.createElement("p");
+  const loadingContainer = document.querySelector(".loading-container");
+  loadingContainer.innerHTML = "";
+  responseContainer.innerHTML = "";
+  responseText.classList.add("response-text");
+  responseContainer.appendChild(responseText);
+  main.appendChild(responseContainer);
 
+  // Create loading state while fetching data
+  const loadingState = document.createElement("div");
+  loadingState.classList.add("loading-state");
+  const loadingIcon = document.createElement("i");
+  loadingIcon.classList.add("fas", "fa-circle-notch", "fa-spin", "fa-lg");
+  loadingState.appendChild(loadingIcon);
+  loadingContainer.appendChild(loadingState);
   try {
     const todos = await getAllTodo();
     updateCompletedTodo(todos);
-
-    const cardContainer = document.querySelector(".card-container");
+    loadingState.remove();
     cardContainer.innerHTML = "";
-
     const searchText = document
       .getElementById("search-input")
       .value.toLowerCase();
@@ -37,37 +52,36 @@ async function displayTodos() {
         todosFound = true;
       }
     }
-
     if (!todosFound) {
       const noTodos = document.createElement("div");
       noTodos.classList.add("no-todos");
       noTodos.textContent = "No matching Todo title";
       cardContainer.appendChild(noTodos);
+      return;
     }
-    return todos;
   } catch (error) {
-    return error;
+    loadingState.remove();
+    responseText.textContent = error.message;
+    console.log(error);
   }
 }
 
 let currentMenu = null;
 function createTodo(todo) {
   const cardContainer = document.querySelector(".card-container");
-
   const todo_id = todo._id;
   const todo_title = todo.todo_title;
   const todo_description = todo.todo_description;
   const todo_created = todo.todo_created;
   const todo_status = todo.todo_status;
-
   const card = document.createElement("div");
   card.setAttribute("todo-id", todo_id);
   card.classList.add("todo-card");
   cardContainer.appendChild(card);
-
   if (todo_status === true) {
     card.remove();
   }
+
   // Todo Action
   const todoAction = document.createElement("div");
   todoAction.classList.add("todo-action");
@@ -107,10 +121,8 @@ function createTodo(todo) {
   const todoTitle = document.createElement("div");
   todoTitle.classList.add("todo-title");
   todoTitle.textContent = todo_title;
-
   const cardMenu = document.createElement("div");
   cardMenu.id = "card-menu";
-
   const iconMenu = document.createElement("i");
   iconMenu.classList.add("fas", "fa-ellipsis-vertical");
   cardMenu.onclick = () => {
@@ -163,7 +175,6 @@ async function handleEditTodo(todo_id, todo_title, todo_description) {
 
   // Show the modal
   overlayEditForm.classList.remove("hidden");
-
   const closeModal = () => {
     warnFieldEditTitle.classList.add("hidden");
     editTodoTitle.style.borderBottomColor = "";
@@ -173,15 +184,13 @@ async function handleEditTodo(todo_id, todo_title, todo_description) {
     e.preventDefault();
     closeModal();
   };
-
   overlayEditForm.onclick = (e) => {
     if (e.target === overlayEditForm) {
       closeModal();
     }
   };
-
   try {
-    const todo = await getTodoById(todo_id);
+    await getTodoById(todo_id);
     editTodoTitle.value = todo_title;
     editTodoDescription.value = todo_description;
     btnSaveTodo.onclick = (e) => {
@@ -194,9 +203,8 @@ async function handleEditTodo(todo_id, todo_title, todo_description) {
         warnFieldEditTitle.textContent = "Title cannot be empty!";
       }
     };
-    console.log(todo);
   } catch (error) {
-    return error;
+    console.log(error);
   }
 }
 
@@ -207,11 +215,10 @@ async function handleUpdateTodo(todo_id) {
     const todo_description = document.getElementById(
       "edit-todo-description"
     ).value;
-    // Call the editTodo function to update the todo
-    const data = await updateTodo(todo_id, todo_title, todo_description);
-    console.log(data);
-    displayTodos();
 
+    // Call the editTodo function to update the todo
+    await updateTodo(todo_id, todo_title, todo_description);
+    displayTodos();
     overlayEditForm.classList.add("hidden");
   } catch (error) {
     console.log(error);
@@ -220,23 +227,21 @@ async function handleUpdateTodo(todo_id) {
 
 async function handleCompleteTodo(todo_id) {
   try {
-    const data = await completeTodo(todo_id);
-    displayAlert(data.message, "blue");
+    const response = await completeTodo(todo_id);
+    displayAlert(response.message, "blue");
     displayTodos();
-    console.log(data);
   } catch (error) {
-    console.log("Error marking todo as complete", error);
+    console.log(error);
   }
 }
 
 async function handleRemoveTodo(todo_id) {
   try {
-    const data = await deleteTodo(todo_id);
+    const response = await deleteTodo(todo_id);
     const card = document.querySelector(`[todo-id="${todo_id}"]`);
     card.remove();
-    displayAlert(data.message, "red");
+    displayAlert(response.message, "red");
     displayTodos();
-    console.log(data);
   } catch (error) {
     console.log(error);
   }
@@ -244,9 +249,8 @@ async function handleRemoveTodo(todo_id) {
 
 async function handleRemoveCompletedTodo() {
   try {
-    const response = await deleteCompletedTodo();
+    await deleteCompletedTodo();
     displayTodos();
-    console.log(response);
   } catch (error) {
     console.log(error);
   }
@@ -259,11 +263,13 @@ async function handleAddTodo(e) {
   const warnFieldAddTitle = document.querySelector(
     ".warning-field.warn-add-title"
   );
+  const searchInput = document.getElementById("search-input");
   const addDescriptionInput = document.getElementById("add-description-input");
   const clearInputTitle = document.getElementById("clear-input-title");
   const clearInputDescription = document.getElementById(
     "clear-input-description"
   );
+
   const btnAddTodo = document.getElementById("btn-add-todo");
   const todo_title = addTitleInput.value.trim();
   const todo_description = addDescriptionInput.value.trim();
@@ -278,13 +284,17 @@ async function handleAddTodo(e) {
   }
   btnAddTodo.disabled = true;
   try {
-    const data = await addNewTodo(todo_title, todo_description, todo_created);
-    console.log(data, todo_created);
-    displayAlert(data.message, "green");
+    const response = await addNewTodo(
+      todo_title,
+      todo_description,
+      todo_created
+    );
+    displayAlert(response.message, "green");
     displayTodos();
     clearInputTitle.style.display = "none";
     clearInputDescription.style.display = "none";
     addTodoForm.reset();
+    searchInput.value = "";
     btnAddTodo.classList.add("submitting");
     btnAddTodo.style.cursor = "not-allowed";
   } catch (error) {
@@ -294,7 +304,7 @@ async function handleAddTodo(e) {
       btnAddTodo.disabled = false;
       btnAddTodo.style.cursor = "pointer";
       btnAddTodo.classList.remove("submitting");
-    }, 2000);
+    }, 1000);
   }
 }
 
@@ -308,16 +318,13 @@ function updateCompletedTodo(todos) {
   );
   const openCompletedTodo = document.getElementById("open-completed-todo");
   const closeCompletedTodo = document.getElementById("close-completed-todo");
-
   openCompletedTodo.onclick = () => {
     unopenedCompletedTodo.classList.add("hidden");
     overlayCompletedTodo.classList.remove("hidden");
   };
-
   closeCompletedTodo.onclick = () => {
     overlayCompletedTodo.classList.add("hidden");
   };
-
   overlayCompletedTodo.onclick = (e) => {
     if (e.target === overlayCompletedTodo) {
       overlayCompletedTodo.classList.add("hidden");
@@ -337,7 +344,6 @@ function updateCompletedTodo(todos) {
     completedTodoList.appendChild(noCompletedTodos);
     return;
   }
-
   const btnClearAll = document.createElement("button");
   btnClearAll.id = "btn-clear-all";
   btnClearAll.textContent = "Clear All";
@@ -345,7 +351,6 @@ function updateCompletedTodo(todos) {
     unopenedCompletedTodo.classList.add("hidden");
     handleRemoveCompletedTodo();
   };
-
   completedTodoList.prepend(btnClearAll);
 
   // Sort todos by completed_at field in descending order
@@ -358,7 +363,6 @@ function updateCompletedTodo(todos) {
     completedTodoBody.classList.add("completed-todo-body");
     completedTodoBody.setAttribute("todo-id", todo._id);
     completedTodoList.appendChild(completedTodoBody);
-
     const completedTodoHeader = document.createElement("div");
     completedTodoHeader.classList.add("completed-todo-header");
     const completedDetail = document.createElement("button");
@@ -395,7 +399,6 @@ function updateCompletedTodo(todos) {
     completedTodoHeader.appendChild(completedTodoDescription);
     completedTodoHeader.appendChild(completedTodoDate);
     completedTodoBody.appendChild(completedTodoHeader);
-
     unopenedCompletedTodo.classList.remove("hidden");
     completedTodoAction.appendChild(unopenedCompletedTodo);
   }
@@ -426,11 +429,7 @@ function displayAlert(message, type) {
   // Check if an alert element already exists
   if (alertElement) {
     // Remove the previous alert class
-    alertElement.classList.remove(
-      "alert-green",
-      "alert-red",
-      "alert-blue"
-    );
+    alertElement.classList.remove("alert-green", "alert-red", "alert-blue");
     // Update the content of the existing alert
     const alertText = alertElement.querySelector(".alert-text");
     alertText.textContent = message;
@@ -446,11 +445,10 @@ function displayAlert(message, type) {
     alertElement.appendChild(alertText);
     alertContainer.appendChild(alertElement);
   }
-
   timeoutId = setTimeout(() => {
     alertElement.remove();
     alertElement = null; // Reset the alert element variable
-  }, 3000);
+  }, 1500);
 }
 
 function themeChange() {
@@ -458,26 +456,23 @@ function themeChange() {
   themeToggle.setAttribute("title", "Light mode");
   const sunIcon = document.querySelector(".sun-icon");
   const moonIcon = document.querySelector(".moon-icon");
-
   const rootElem = document.documentElement;
   let dataTheme = rootElem.getAttribute("data-theme");
-
   themeToggle.onclick = () => {
     if (moonIcon.classList.contains("hidden")) {
       moonIcon.classList.remove("hidden");
       sunIcon.classList.add("hidden");
       themeToggle.setAttribute("title", "Dark mode");
-
       dataTheme = "dark";
       rootElem.setAttribute("data-theme", "dark");
     } else {
       sunIcon.classList.remove("hidden");
       moonIcon.classList.add("hidden");
       themeToggle.setAttribute("title", "Light mode");
-
       dataTheme = "light";
       rootElem.setAttribute("data-theme", "light");
     }
+
     // Set the new localStorage item after toggling the theme
     localStorage.setItem("theme", dataTheme);
   };
@@ -585,4 +580,4 @@ searchTodo();
 themeChange();
 const addTodoForm = document.forms.namedItem("add-todo-form");
 addTodoForm.addEventListener("submit", handleAddTodo);
-displayTodos().then((todo) => console.log(todo));
+displayTodos();
